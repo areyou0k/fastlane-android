@@ -17,20 +17,12 @@ before_all do |lane, options|
 
   ENV['Android_GROUP'] = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e87d05fe-5255-4629-b448-5270f497cba2'
 
-  wechatwork(
-    webhook: ENV['Android_GROUP'],
-    markdown: "**#{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD START** \r\n\n  #{ENV['CHANGELOG']}",
-    mentioned_mobile_list: []
-  )
-  # send_e_mail(
-  #   stmp_server: "smtp.exmail.qq.com",
-  #   user_name: "update@hellotalk.com",
-  #   password: "Hello123",
-  #   subject: "Android CI - START - #{ENV['GIT_BRANCH']}",
-  #   message_body: "Hi! @archon, A new build start",
-  #   recipients: "issenn@hellotalk.com,update@hellotalk.com,zhangfeng@hellotalk.com,huangzefeng@hellotalk.com,carl@hellotalk.com"
-  #   # recipients: ENV['SEND_E_MAIL_RECIPIENTS'].split(',')
-  # )
+  #wechatwork(
+  #  webhook: ENV['Android_GROUP'],
+  #  markdown: "**#{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD START** \r\n\n  #{ENV['CHANGELOG']}",
+  #  mentioned_mobile_list: []
+  #)
+
   gradle(
     task: "-v"
   )
