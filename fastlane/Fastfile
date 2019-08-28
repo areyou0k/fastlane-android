@@ -14,6 +14,14 @@ before_all do |lane, options|
     message: "Hi! @channel \r\n A new build start",
     default_payloads: [:git_branch, :lane, :git_author]
   )
+
+  ENV['Android_GROUP'] = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e87d05fe-5255-4629-b448-5270f497cba2'
+
+  wechatwork(
+    webhook: ENV['Android_GROUP'],
+    markdown: "**#{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD START** \r\n\n  #{ENV['CHANGELOG']}",
+    mentioned_mobile_list: []
+  )
   # send_e_mail(
   #   stmp_server: "smtp.exmail.qq.com",
   #   user_name: "update@hellotalk.com",
@@ -69,7 +77,7 @@ lane :do_publish_google do |options|
     task: "assemble",
     flavor: "Google",
     build_type: "Release",
-    print_command_output: false
+    print_command_output: true
   )
   do_upload_firim
 end
@@ -89,6 +97,11 @@ lane :do_upload_firim do
       message: "Hi! @archon \r\n A new app uploading \r\nFlavor: #{flavor}",
       default_payloads: [:git_branch, :lane, :git_author]
     )
+    wechatwork(
+      webhook: ENV['Android_GROUP'],
+      message: "A new app uploading \r\nFlavor: #{flavor}",
+      default_payloads: [:git_branch, :lane, :git_author]
+    )
     change_log = "[#{flavor}]+[#{ENV['GIT_BRANCH']}]\r\n---\r\n" + ENV['CHANGELOG']
     firim(
       apk: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH],
@@ -98,6 +111,12 @@ lane :do_upload_firim do
     )
     slack(
       message: "Hi! @archon \r\n A new app upload success \r\nFlavor: #{flavor} \r\n#{ENV['CHANGELOG']}",
+      success: true,
+      default_payloads: [:git_branch, :lane, :git_author, :test_result]
+    )
+    wechatwork(
+      webhook: ENV['Android_GROUP'],
+      message: "A new app upload success \r\nFlavor: #{flavor} \r\n#{ENV['CHANGELOG']}",
       success: true,
       default_payloads: [:git_branch, :lane, :git_author, :test_result]
     )
@@ -119,6 +138,12 @@ lane :do_upload_firim do
         success: false,
         default_payloads: [:git_branch, :lane, :git_author, :test_result]
       )
+      wechatwork(
+        webhook: ENV['Android_GROUP'],
+        message: "A new app upload failed \r\nFlavor: #{flavor}",
+        success: false,
+        default_payloads: [:git_branch, :lane, :git_author, :test_result]
+      )
       # raise ex
       puts ex
     end
@@ -132,6 +157,11 @@ end
 after_all do |lane, options|
   slack(
     message: "Hi! @channel \r\n A new build end",
+    default_payloads: [:git_branch, :lane, :git_author]
+  )
+  wechatwork(
+    webhook: ENV['Android_GROUP'],
+    message: "A new build end",
     default_payloads: [:git_branch, :lane, :git_author]
   )
 end
