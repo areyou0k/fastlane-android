@@ -19,7 +19,7 @@ before_all do |lane, options|
   #   user_name: "update@hellotalk.com",
   #   password: "Hello123",
   #   subject: "Android CI - START - #{ENV['GIT_BRANCH']}",
-  #   message_body: "Hi! @issenn, A new build start",
+  #   message_body: "Hi! @archon, A new build start",
   #   recipients: "issenn@hellotalk.com,update@hellotalk.com,zhangfeng@hellotalk.com,huangzefeng@hellotalk.com,carl@hellotalk.com"
   #   # recipients: ENV['SEND_E_MAIL_RECIPIENTS'].split(',')
   # )
@@ -41,7 +41,7 @@ lane :test_email do
     user_name: "update@hellotalk.com",
     password: "Hello123",
     subject: "Android CI - START - #{ENV['GIT_BRANCH']}",
-    message_body: "Hi! @issenn, A new build start",
+    message_body: "Hi! @archon, A new build start",
     recipients: "archon@hellotalk.com,update@hellotalk.com,zhangfeng@hellotalk.com,huangzefeng@hellotalk.com,carl@hellotalk.com".split(',')  
   )
 end
@@ -86,7 +86,7 @@ lane :do_upload_firim do
   begin
     flavor = lane_context[SharedValues::GRADLE_FLAVOR] || /([^\/-]*)(?=-[^\/-]*\.apk$)/.match(apk)
     slack(
-      message: "Hi! @issenn \r\n A new app uploading \r\nFlavor: #{flavor}",
+      message: "Hi! @archon \r\n A new app uploading \r\nFlavor: #{flavor}",
       default_payloads: [:git_branch, :lane, :git_author]
     )
     change_log = "[#{flavor}]+[#{ENV['GIT_BRANCH']}]\r\n---\r\n" + ENV['CHANGELOG']
@@ -97,7 +97,7 @@ lane :do_upload_firim do
       app_changelog: change_log
     )
     slack(
-      message: "Hi! @issenn \r\n A new app upload success \r\nFlavor: #{flavor} \r\n#{ENV['CHANGELOG']}",
+      message: "Hi! @archon \r\n A new app upload success \r\nFlavor: #{flavor} \r\n#{ENV['CHANGELOG']}",
       success: true,
       default_payloads: [:git_branch, :lane, :git_author, :test_result]
     )
@@ -106,7 +106,7 @@ lane :do_upload_firim do
     #   user_name: "update@hellotalk.com",
     #   password: "Hello123",
     #   subject: "Android CI - End - #{ENV['GIT_BRANCH']}",
-    #   message_body: "Hi! @issenn \r\n A new app upload success \r\nFlavor: #{flavor} \r\n#{ENV['CHANGELOG']}"
+    #   message_body: "Hi! @archon \r\n A new app upload success \r\nFlavor: #{flavor} \r\n#{ENV['CHANGELOG']}"
     # )
     $upload_retry=0
   rescue => ex
@@ -115,7 +115,7 @@ lane :do_upload_firim do
       do_upload_firim
     else
       slack(
-        message: "Hi! @issenn \r\n A new app upload failed \r\nFlavor: #{flavor}",
+        message: "Hi! @archon \r\n A new app upload failed \r\nFlavor: #{flavor}",
         success: false,
         default_payloads: [:git_branch, :lane, :git_author, :test_result]
       )
