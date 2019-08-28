@@ -43,17 +43,6 @@ before_each do |lane, options|
   # ...
 end
 
-lane :test_email do
-  send_e_mail(
-    stmp_server: "smtp.exmail.qq.com",
-    user_name: "update@hellotalk.com",
-    password: "Hello123",
-    subject: "Android CI - START - #{ENV['GIT_BRANCH']}",
-    message_body: "Hi! @archon, A new build start",
-    recipients: "archon@hellotalk.com,update@hellotalk.com,zhangfeng@hellotalk.com,huangzefeng@hellotalk.com,carl@hellotalk.com".split(',')  
-  )
-end
-
 desc "Submit a new Release Build to all"
 lane :do_publish_all do |options|
   do_publish_china
@@ -66,7 +55,7 @@ lane :do_publish_china do |options|
     task: "assemble",
     flavor: "China",
     build_type: "Release",
-    print_command_output: false
+    print_command_output: true
   )
   do_upload_firim
 end
@@ -119,13 +108,7 @@ lane :do_upload_firim do
       message: "A new app upload success. \r\nFlavor: #{flavor} \r\n#{ENV['CHANGELOG']} \r\n#{git_branch}, #{lane}, #{git_author}, #{test_result}",
       mentioned_mobile_list: []
     )
-    # send_e_mail(
-    #   stmp_server: "smtp.exmail.qq.com",
-    #   user_name: "update@hellotalk.com",
-    #   password: "Hello123",
-    #   subject: "Android CI - End - #{ENV['GIT_BRANCH']}",
-    #   message_body: "Hi! @archon \r\n A new app upload success \r\nFlavor: #{flavor} \r\n#{ENV['CHANGELOG']}"
-    # )
+
     $upload_retry=0
   rescue => ex
     $upload_retry += 1
