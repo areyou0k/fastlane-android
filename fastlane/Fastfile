@@ -22,8 +22,9 @@ before_all do |lane, options|
   )
 
   ENV['Android_GROUP'] = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e87d05fe-5255-4629-b448-5270f497cba2'
+  ENV['Android_GROUP2'] = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=59122387-2ec3-4cad-932e-0979efa71f89'
 
-  phone_list = "18779144521,18126009603"
+  phone_list = "18779144521,18126009603,18273141743,17620943723"
   ENV['PHONE'] = phone_list + "," + ENV['PHONE']
 
   wechatwork(
@@ -155,7 +156,7 @@ lane :do_upload_firim do
     )
     wechatwork(
       webhook: ENV['Android_GROUP'],
-      markdown: "Upload <font color=\"info\">success</font>",
+      markdown: "Upload <font color=\"info\">success</font>. \r\nFlavor: #{flavor}",
       mentioned_mobile_list: []
     )
 
@@ -172,7 +173,7 @@ lane :do_upload_firim do
       )
       wechatwork(
         webhook: ENV['Android_GROUP'],
-        markdown: "Upload <font color=\"warning\">failed</font>.",
+        markdown: "Upload <font color=\"warning\">failed</font>. \r\nFlavor: #{flavor}",
         mentioned_mobile_list: []
       )
       # raise ex
@@ -191,7 +192,7 @@ after_all do |lane, options|
     default_payloads: [:git_branch, :lane, :git_author]
   )
   wechatwork(
-    webhook: ENV['Android_GROUP'],
+    webhook: ENV['Android_GROUP2'],
     markdown: "**Android #{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD Ended** \r\n\n  #{ENV['CHANGELOG']}",
     mentioned_mobile_list: ENV['PHONE']
   )
