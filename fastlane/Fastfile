@@ -23,10 +23,15 @@ before_all do |lane, options|
 
   ENV['Android_GROUP'] = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e87d05fe-5255-4629-b448-5270f497cba2'
 
+  phone_list = "13570439546"
+  if ENV['PHONE'] 
+    phone_list = ENV['PHONE'] + "," + phone_list
+  end
+
   wechatwork(
     webhook: ENV['Android_GROUP'],
     markdown: "**#{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD START** \r\n\n  #{ENV['CHANGELOG']}",
-    mentioned_mobile_list: ENV['PHONE']
+    mentioned_mobile_list: phone_list
   )
 
   gradle(
