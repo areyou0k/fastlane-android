@@ -14,7 +14,7 @@ before_all do |lane, options|
     changelog_path: './CHANGELOG.md',
     section_identifier: '[Phone]',
     excluded_markdown_elements: ['-', '###']
-  )
+  ).split(',').map(&:to_i)
 
   slack(
     message: "Hi! @channel \r\n A new build start \r\n#{ENV['PHONE']}",
@@ -37,7 +37,13 @@ before_all do |lane, options|
   )
 end
 
+
 before_each do |lane, options|
+  # ...
+end
+
+desc "Test all step"
+lane :test_all_step do |options|
   # ...
 end
 
@@ -46,7 +52,7 @@ lane :do_publish_all do |options|
   do_publish_china
   do_publish_google
 end
-
+ 
 desc "Submit a new Release Build to China"
 lane :do_publish_china do |options|
   if gradle(
