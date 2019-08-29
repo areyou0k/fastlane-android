@@ -72,6 +72,7 @@ lane :do_compile_china do |options|
       markdown: "Gradle task for China flavor <font color=\"warning\">failed</font>.",
       mentioned_mobile_list: []
       )
+    puts e
   end
 end
 
@@ -95,7 +96,7 @@ lane :do_compile_google do |options|
       markdown: "Gradle task for Google flavor <font color=\"warning\">failed</font>.",
       mentioned_mobile_list: []
       )
-    puts ex
+    puts e
   end
 end
 
