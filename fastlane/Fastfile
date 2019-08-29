@@ -64,13 +64,13 @@ lane :do_compile_china do |options|
       )
     wechatwork(
       webhook: ENV['Android_GROUP'],
-      markdown: "Gradle task <font color=\"info\">success</font>.\r\nFlavor: #{flavor}",
+      markdown: "Gradle task <font color=\"info\">success</font>.",
       mentioned_mobile_list: []
       )
   rescue Exception => e
     wechatwork(
       webhook: ENV['Android_GROUP'],
-      markdown: "Gradle task <font color=\"warning\">failed</font>.\r\nFlavor: #{flavor}",
+      markdown: "Gradle task <font color=\"warning\">failed</font>.",
       mentioned_mobile_list: []
       )
   end
@@ -170,8 +170,8 @@ after_all do |lane, options|
   )
   wechatwork(
     webhook: ENV['Android_GROUP'],
-    markdown: "Jenkins build ended.",
-    mentioned_mobile_list: []
+    markdown: "**#{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD Ended** \r\n\n  #{ENV['CHANGELOG']}",
+    mentioned_mobile_list: phone_list
   )
 end
 
