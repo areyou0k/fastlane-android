@@ -23,13 +23,13 @@ before_all do |lane, options|
 
   ENV['Android_GROUP'] = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e87d05fe-5255-4629-b448-5270f497cba2'
 
-  phone_list = "17620943723" 
-  ENV['PHONE'] = ENV['PHONE'] + "," + phone_list
+  phone_list = "18779144521,18126009603"
+  ENV['PHONE'] = phone_list + "," + ENV['PHONE']
 
   wechatwork(
     webhook: ENV['Android_GROUP'],
     markdown: "**#{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD START** \r\n\n  #{ENV['CHANGELOG']}",
-    mentioned_mobile_list: ENV['PHONE']
+    mentioned_mobile_list: []
   )
 
   gradle(
@@ -62,13 +62,36 @@ lane :do_compile_china do |options|
       )
     wechatwork(
       webhook: ENV['Android_GROUP'],
-      markdown: "Gradle task <font color=\"info\">success</font>.",
+      markdown: "Gradle task for China flavor <font color=\"info\">success</font>.",
       mentioned_mobile_list: []
       )
   rescue Exception => e
     wechatwork(
       webhook: ENV['Android_GROUP'],
-      markdown: "Gradle task <font color=\"warning\">failed</font>.",
+      markdown: "Gradle task for China flavor <font color=\"warning\">failed</font>.",
+      mentioned_mobile_list: []
+      )
+  end
+end
+
+desc "Compile Google flavor."
+lane :do_compile_google do |options|
+  begin
+    gradle(
+      task: "assemble",
+      flavor: "Google",
+      build_type: "Release",
+      print_command_output: false
+      )
+    wechatwork(
+      webhook: ENV['Android_GROUP'],
+      markdown: "Gradle task for Google flavor <font color=\"info\">success</font>.",
+      mentioned_mobile_list: []
+      )
+  rescue Exception => e
+    wechatwork(
+      webhook: ENV['Android_GROUP'],
+      markdown: "Gradle task for Google flavor <font color=\"warning\">failed</font>.",
       mentioned_mobile_list: []
       )
   end
@@ -88,12 +111,13 @@ end
 
 desc "Submit a new Release Build to Google"
 lane :do_publish_google do |options|
-  gradle(
-    task: "assemble",
-    flavor: "Google",
-    build_type: "Release",
-    print_command_output: false
-  )
+  #gradle(
+  #  task: "assemble",
+  #  flavor: "Google",
+  #  build_type: "Release",
+  #  print_command_output: false
+  #)
+  do_compile_google
   do_upload_firim
 end
 
@@ -168,7 +192,7 @@ after_all do |lane, options|
   )
   wechatwork(
     webhook: ENV['Android_GROUP'],
-    markdown: "**#{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD Ended** \r\n\n  #{ENV['CHANGELOG']}",
+    markdown: "**Android #{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD Ended** \r\n\n  #{ENV['CHANGELOG']}",
     mentioned_mobile_list: ENV['PHONE']
   )
 end
