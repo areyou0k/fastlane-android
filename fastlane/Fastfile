@@ -16,12 +16,12 @@ before_all do |lane, options|
     excluded_markdown_elements: ['-', '###']
   )
 
-  def phone_to_list
+  def phone_to_list(phone)
     return phone.split(',').map{|item| item.to_i }
   end
 
-  ENV['PHONE'] = phone_to_list
-  
+  ENV['PHONE'] = phone_to_list(phone)
+
   slack(
     message: "Hi! @channel \r\n A new build start \r\n#{ENV['PHONE']}",
     default_payloads: [:git_branch, :lane, :git_author]
