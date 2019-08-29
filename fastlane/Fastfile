@@ -102,7 +102,7 @@ lane :do_upload_firim do
     )
     wechatwork(
       webhook: ENV['Android_GROUP'],
-      message: "A new app upload <font color="info">success</font>. \r\nFlavor: #{flavor}",
+      message: "A new app upload <font color=\"info\">success</font>. \r\nFlavor: #{flavor}",
       mentioned_mobile_list: []
     )
 
@@ -119,7 +119,7 @@ lane :do_upload_firim do
       )
       wechatwork(
         webhook: ENV['Android_GROUP'],
-        message: "A new app upload <font color="warning">failed</font>. \r\nFlavor: #{flavor}",
+        message: "A new app upload <font color=\"warning\">failed</font>. \r\nFlavor: #{flavor}",
         mentioned_mobile_list: []
       )
       # raise ex
