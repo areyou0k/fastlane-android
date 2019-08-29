@@ -95,6 +95,7 @@ lane :do_compile_google do |options|
       markdown: "Gradle task for Google flavor <font color=\"warning\">failed</font>.",
       mentioned_mobile_list: []
       )
+    puts ex
   end
 end
 
@@ -106,8 +107,10 @@ lane :do_publish_china do |options|
   #  build_type: "Release",
   #  print_command_output: false
   #  )
-  do_compile_china
-  do_upload_firim
+  if do_compile_china
+    do_upload_firim
+  else
+  end
 end
 
 desc "Submit a new Release Build to Google"
@@ -118,8 +121,10 @@ lane :do_publish_google do |options|
   #  build_type: "Release",
   #  print_command_output: false
   #)
-  do_compile_google
-  do_upload_firim
+  if do_compile_google
+    do_upload_firim
+  else
+  end
 end
 
 $upload_retry=0
