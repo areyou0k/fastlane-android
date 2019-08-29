@@ -16,7 +16,7 @@ before_all do |lane, options|
   excluded_markdown_elements: ['-', '###']
   )
   slack(
-    message: "Hi! @channel \r\n A new build start \r\n#{ENV['Phone']}",
+    message: "Hi! @channel \r\n A new build start \r\n#{ENV['PHONE']}",
     default_payloads: [:git_branch, :lane, :git_author]
   )
 
@@ -25,7 +25,7 @@ before_all do |lane, options|
   wechatwork(
     webhook: ENV['Android_GROUP'],
     markdown: "**#{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD START** \r\n\n  #{ENV['CHANGELOG']}",
-    mentioned_mobile_list: ["#{ENV['Phone']}"]
+    mentioned_mobile_list: ["#{ENV['PHONE']}"]
   )
 
   gradle(
