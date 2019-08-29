@@ -66,6 +66,7 @@ lane :do_publish_china do |options|
       markdown: "Gradle task <font color=\"warning\">failed</font>.",
       mentioned_mobile_list: []
     )
+  end
   do_upload_firim
 end
 
