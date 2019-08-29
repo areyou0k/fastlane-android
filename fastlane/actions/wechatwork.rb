@@ -10,7 +10,7 @@ module Fastlane
 
         markdown = options[:markdown]
         webhook = options[:webhook]
-        mentioned_mobile_list = options[:mentioned_mobile_list]
+        mentioned_mobile_list = options[:mentioned_mobile_list].split(',').map(&:to_i)
 
         params = {}
         params["msgtype"] = "markdown"
