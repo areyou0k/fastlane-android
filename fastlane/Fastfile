@@ -10,12 +10,18 @@ before_all do |lane, options|
     section_identifier: '[Unreleased]',
     excluded_markdown_elements: ['-', '###']
   )
-  ENV['PHONE'] = read_changelog(
+  phone = read_changelog(
     changelog_path: './CHANGELOG.md',
     section_identifier: '[Phone]',
     excluded_markdown_elements: ['-', '###']
   )
 
+  def phone_to_list
+    return phone.split(',').map{|item| item.to_i }
+  end
+
+  ENV['PHONE'] = phone_to_list
+  
   slack(
     message: "Hi! @channel \r\n A new build start \r\n#{ENV['PHONE']}",
     default_payloads: [:git_branch, :lane, :git_author]
