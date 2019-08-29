@@ -10,15 +10,14 @@ before_all do |lane, options|
     section_identifier: '[Unreleased]',
     excluded_markdown_elements: ['-', '###']
   )
-  ENV['phone_str'] = read_changelog(
+  ENV['PHONE'] = read_changelog(
     changelog_path: './CHANGELOG.md',
     section_identifier: '[Phone]',
     excluded_markdown_elements: ['-', '###']
   )
-  ENV['PHONE'] = ENV['phone_str'].gsub(element.to_s, "")
 
   slack(
-    message: "Hi! @channel \r\n A new build start \r\n#{ENV['PHONE'].class}",
+    message: "Hi! @channel \r\n A new build start \r\n#{ENV['PHONE']}",
     default_payloads: [:git_branch, :lane, :git_author]
   )
 
