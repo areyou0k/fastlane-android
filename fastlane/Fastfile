@@ -80,7 +80,7 @@ lane :do_upload_firim do
     )
     wechatwork(
       webhook: ENV['Android_GROUP'],
-      markdown: "A new app uploading. \r\nFlavor: #{flavor} \r\n#{git_branch}, #{lane}, #{git_author}",
+      markdown: "A new app uploading. \r\nFlavor: #{flavor}",
       mentioned_mobile_list: []
     )
     change_log = "[#{flavor}]+[#{ENV['GIT_BRANCH']}]\r\n---\r\n" + ENV['CHANGELOG']
@@ -97,7 +97,7 @@ lane :do_upload_firim do
     )
     wechatwork(
       webhook: ENV['Android_GROUP'],
-      message: "A new app upload success. \r\nFlavor: #{flavor} \r\n#{ENV['CHANGELOG']} \r\n#{git_branch}, #{lane}, #{git_author}, #{test_result}",
+      message: "A new app upload success. \r\nFlavor: #{flavor} \r\n#{ENV['CHANGELOG']}",
       mentioned_mobile_list: []
     )
 
@@ -114,7 +114,7 @@ lane :do_upload_firim do
       )
       wechatwork(
         webhook: ENV['Android_GROUP'],
-        message: "A new app upload failed. \r\nFlavor: #{flavor}, \r\n#{git_branch}, #{lane}, #{git_author}, #{test_result}",
+        message: "A new app upload failed. \r\nFlavor: #{flavor}",
         mentioned_mobile_list: []
       )
       # raise ex
@@ -134,7 +134,7 @@ after_all do |lane, options|
   )
   wechatwork(
     webhook: ENV['Android_GROUP'],
-    message: "A new build end. \r\n#{git_branch}, #{lane}, #{git_author}",
+    message: "A new build ended.",
     mentioned_mobile_list: []
   )
 end
