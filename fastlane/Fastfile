@@ -15,7 +15,7 @@ before_all do |lane, options|
     section_identifier: '[Phone]',
     excluded_markdown_elements: ['-', '###']
   )
-  ENV['PHONE'] = ENV['phone_str'].split(",").map{|item| item.to_i }
+  ENV['PHONE'] = ENV['phone_str'].gsub(element.to_s, "")
 
   slack(
     message: "Hi! @channel \r\n A new build start \r\n#{ENV['PHONE'].class}",
