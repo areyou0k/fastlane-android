@@ -14,10 +14,10 @@ before_all do |lane, options|
     changelog_path: './CHANGELOG.md',
     section_identifier: '[Phone]',
     excluded_markdown_elements: ['-', '###']
-  ).split(',').map(&:to_i)
+  )
 
   slack(
-    message: "Hi! @channel \r\n A new build start \r\n#{ENV['PHONE']}",
+    message: "Hi! @channel \r\n A new build start \r\n#{ENV['PHONE'].class}",
     default_payloads: [:git_branch, :lane, :git_author]
   )
 
