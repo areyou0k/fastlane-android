@@ -107,11 +107,11 @@ lane :do_upload_firim do
       message: "Hi! @archon \r\n A new app uploading \r\nFlavor: #{flavor}",
       default_payloads: [:git_branch, :lane, :git_author]
     )
-    #wechatwork(
-    #  webhook: ENV['Android_GROUP'],
-    #  markdown: "A new app uploading. \r\nFlavor: #{flavor}",
-    #  mentioned_mobile_list: []
-    #)
+    wechatwork(
+      webhook: ENV['Android_GROUP'],
+      markdown: "A new app uploading. \r\nFlavor: #{flavor}",
+      mentioned_mobile_list: []
+    )
     change_log = "[#{flavor}]+[#{ENV['GIT_BRANCH']}]\r\n---\r\n" + ENV['CHANGELOG']
     firim(
       apk: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH],
@@ -124,11 +124,11 @@ lane :do_upload_firim do
       success: true,
       default_payloads: [:git_branch, :lane, :git_author, :test_result]
     )
-    #wechatwork(
-    #  webhook: ENV['Android_GROUP'],
-    #  markdown: "Upload <font color=\"info\">success</font>",
-    #  mentioned_mobile_list: []
-    #)
+    wechatwork(
+      webhook: ENV['Android_GROUP'],
+      markdown: "Upload <font color=\"info\">success</font>",
+      mentioned_mobile_list: []
+    )
 
     $upload_retry=0
   rescue => ex
