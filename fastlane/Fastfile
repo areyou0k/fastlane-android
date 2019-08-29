@@ -10,11 +10,12 @@ before_all do |lane, options|
     section_identifier: '[Unreleased]',
     excluded_markdown_elements: ['-', '###']
   )
-  ENV['PHONE'] = read_changelog(
+  ENV['phone_str'] = read_changelog(
     changelog_path: './CHANGELOG.md',
     section_identifier: '[Phone]',
     excluded_markdown_elements: ['-', '###']
   )
+  ENV['PHONE'] = ENV['phone_str'].split(",").map{|item| item.to_i }
 
   slack(
     message: "Hi! @channel \r\n A new build start \r\n#{ENV['PHONE'].class}",
