@@ -23,7 +23,7 @@ before_all do |lane, options|
 
   ENV['Android_GROUP'] = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e87d05fe-5255-4629-b448-5270f497cba2'
 
-  phone_list = "13570439546"
+  phone_list = ""
   if ENV['PHONE'] 
     phone_list = ENV['PHONE'] + "," + phone_list
   end
@@ -47,37 +47,44 @@ before_each do |lane, options|
   # ...
 end
 
-desc "Test all step"
-lane :test_all_step do |options|
-  # ...
-end
-
 desc "Submit a new Release Build to all"
 lane :do_publish_all do |options|
   do_publish_china
   do_publish_google
 end
- 
-desc "Submit a new Release Build to China"
-lane :do_publish_china do |options|
-  if gradle(
+
+desc "Compile China flavor."
+lane :do_compile_china do |options|
+  begin
+    gradle(
       task: "assemble",
       flavor: "China",
       build_type: "Release",
       print_command_output: false
-    )
+      )
     wechatwork(
       webhook: ENV['Android_GROUP'],
-      markdown: "Gradle task <font color=\"info\">success</font>.",
+      markdown: "Gradle task <font color=\"info\">success</font>.\r\nFlavor: #{flavor}",
       mentioned_mobile_list: []
       )
-  else
+  rescue Exception => e
     wechatwork(
       webhook: ENV['Android_GROUP'],
-      markdown: "Gradle task <font color=\"warning\">failed</font>.",
+      markdown: "Gradle task <font color=\"warning\">failed</font>.\r\nFlavor: #{flavor}",
       mentioned_mobile_list: []
-    )
+      )
   end
+end
+
+desc "Submit a new Release Build to China"
+lane :do_publish_china do |options|
+  #gradle(
+  #  task: "assemble",
+  #  flavor: "China",
+  #  build_type: "Release",
+  #  print_command_output: false
+  #  )
+  do_compile_china
   do_upload_firim
 end
 

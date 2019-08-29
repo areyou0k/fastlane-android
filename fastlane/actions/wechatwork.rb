@@ -20,9 +20,8 @@ module Fastlane
         if mentioned_mobile_list.empty? == false
           params = {}
           params["msgtype"] = "text"
-          text = mentioned_mobile_list.split(',').map{|item| item.to_i }
-          params["text"] = {"content": "", "mentioned_mobile_list": text}
-          puts text
+          phone_list = mentioned_mobile_list.split(',').map{|item| item.to_i }
+          params["text"] = {"content": "", "mentioned_mobile_list": phone_list}
           self.post_to_wechat(webhook, params)
         end
 
