@@ -11,10 +11,11 @@ before_all do |lane, options|
     excluded_markdown_elements: ['-', '###']
   )
   ENV['PHONE'] = read_changelog(
-  changelog_path: './CHANGELOG.md',
-  section_identifier: '[Phone]',
-  excluded_markdown_elements: ['-', '###']
-  )
+    changelog_path: './CHANGELOG.md',
+    section_identifier: '[Phone]',
+    excluded_markdown_elements: ['-', '###']
+  ).split(',').map(&:to_i)
+
   slack(
     message: "Hi! @channel \r\n A new build start \r\n#{ENV['PHONE']}",
     default_payloads: [:git_branch, :lane, :git_author]
@@ -48,12 +49,23 @@ end
 
 desc "Submit a new Release Build to China"
 lane :do_publish_china do |options|
-  gradle(
-    task: "assemble",
-    flavor: "China",
-    build_type: "Release",
-    print_command_output: false
-  )
+  if gradle(
+      task: "assemble",
+      flavor: "China",
+      build_type: "Release",
+      print_command_output: false
+    )
+    wechatwork(
+      webhook: ENV['Android_GROUP'],
+      markdown: "Gradle task <font color=\"info\">success</font>.",
+      mentioned_mobile_list: []
+      )
+  else
+    wechatwork(
+      webhook: ENV['Android_GROUP'],
+      markdown: "Gradle task <font color=\"warning\">failed</font>.",
+      mentioned_mobile_list: []
+    )
   do_upload_firim
 end
 
@@ -83,11 +95,11 @@ lane :do_upload_firim do
       message: "Hi! @archon \r\n A new app uploading \r\nFlavor: #{flavor}",
       default_payloads: [:git_branch, :lane, :git_author]
     )
-    wechatwork(
-      webhook: ENV['Android_GROUP'],
-      markdown: "A new app uploading. \r\nFlavor: #{flavor}",
-      mentioned_mobile_list: []
-    )
+    #wechatwork(
+    #  webhook: ENV['Android_GROUP'],
+    #  markdown: "A new app uploading. \r\nFlavor: #{flavor}",
+    #  mentioned_mobile_list: []
+    #)
     change_log = "[#{flavor}]+[#{ENV['GIT_BRANCH']}]\r\n---\r\n" + ENV['CHANGELOG']
     firim(
       apk: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH],
@@ -100,11 +112,11 @@ lane :do_upload_firim do
       success: true,
       default_payloads: [:git_branch, :lane, :git_author, :test_result]
     )
-    wechatwork(
-      webhook: ENV['Android_GROUP'],
-      markdown: "Upload <font color=\"info\">success</font>",
-      mentioned_mobile_list: []
-    )
+    #wechatwork(
+    #  webhook: ENV['Android_GROUP'],
+    #  markdown: "Upload <font color=\"info\">success</font>",
+    #  mentioned_mobile_list: []
+    #)
 
     $upload_retry=0
   rescue => ex
@@ -139,7 +151,7 @@ after_all do |lane, options|
   )
   wechatwork(
     webhook: ENV['Android_GROUP'],
-    markdown: "Build ended.",
+    markdown: "Jenkins build ended.",
     mentioned_mobile_list: []
   )
 end
