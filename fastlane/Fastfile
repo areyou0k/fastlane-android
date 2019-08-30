@@ -27,18 +27,18 @@ before_all do |lane, options|
     default_payloads: [:git_branch, :lane, :git_author]
   )
 
-  #wechatwork(
-  #  webhook: ENV['Android_Dev'],
-  #  markdown: "**#{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD START** \r\n\n  #{ENV['CHANGELOG']}",
-  #  mentioned_mobile_list: []
-  #)
+  wechatwork(
+    webhook: ENV['Android_Dev'],
+    markdown: "**#{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD START** \r\n\n  #{ENV['CHANGELOG']}",
+    mentioned_mobile_list: []
+  )
 
   gradle(
     task: "-v"
   )
-  #gradle(
-  #  task: "clean"
-  #)
+  gradle(
+    task: "clean"
+  )
 end
 
 
