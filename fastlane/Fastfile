@@ -27,11 +27,11 @@ before_all do |lane, options|
   phone_list = "18779144521,18126009603,18273141743,17620943723"
   ENV['PHONE'] = phone_list + "," + ENV['PHONE']
 
-  wechatwork(
-    webhook: ENV['Android_GROUP'],
-    markdown: "**#{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD START** \r\n\n  #{ENV['CHANGELOG']}",
-    mentioned_mobile_list: []
-  )
+  #wechatwork(
+  #  webhook: ENV['Android_GROUP'],
+  #  markdown: "**#{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD START** \r\n\n  #{ENV['CHANGELOG']}",
+  #  mentioned_mobile_list: []
+  #)
 
   gradle(
     task: "-v"
@@ -61,17 +61,27 @@ lane :do_compile_china do |options|
       build_type: "Release",
       print_command_output: false
       )
-    wechatwork(
-      webhook: ENV['Android_GROUP'],
-      markdown: "Gradle task for China flavor <font color=\"info\">success</font>.",
-      mentioned_mobile_list: []
+    slack(
+      message: "Gradle task for China flavor success.",
+      success: true,
+      default_payloads: []
       )
-  rescue Exception => e
-    wechatwork(
-      webhook: ENV['Android_GROUP'],
-      markdown: "Gradle task for China flavor <font color=\"warning\">failed</font>.",
-      mentioned_mobile_list: []
+    #wechatwork(
+    #  webhook: ENV['Android_GROUP'],
+    #  markdown: "Gradle task for China flavor <font color=\"info\">success</font>.",
+    #  mentioned_mobile_list: []
+    #  )
+  rescue => e
+    slack(
+      message: "Gradle task for Google flavor failed.",
+      success: true,
+      default_payloads: []
       )
+    #wechatwork(
+    #  webhook: ENV['Android_GROUP'],
+    #  markdown: "Gradle task for China flavor <font color=\"warning\">failed</font>.",
+    #  mentioned_mobile_list: []
+    #  )
     puts e
   end
 end
@@ -85,17 +95,27 @@ lane :do_compile_google do |options|
       build_type: "Release",
       print_command_output: false
       )
-    wechatwork(
-      webhook: ENV['Android_GROUP'],
-      markdown: "Gradle task for Google flavor <font color=\"info\">success</font>.",
-      mentioned_mobile_list: []
+    slack(
+      message: "Gradle task for Google flavor success.",
+      success: true,
+      default_payloads: []
       )
+    #wechatwork(
+    #  webhook: ENV['Android_GROUP'],
+    #  markdown: "Gradle task for Google flavor <font color=\"info\">success</font>.",
+    #  mentioned_mobile_list: []
+    #  )
   rescue Exception => e
-    wechatwork(
-      webhook: ENV['Android_GROUP'],
-      markdown: "Gradle task for Google flavor <font color=\"warning\">failed</font>.",
-      mentioned_mobile_list: []
+    slack(
+      message: "Gradle task for Google flavor failed.",
+      success: true,
+      default_payloads: []
       )
+    #wechatwork(
+    #  webhook: ENV['Android_GROUP'],
+    #  markdown: "Gradle task for Google flavor <font color=\"warning\">failed</font>.",
+    #  mentioned_mobile_list: []
+    #  )
     puts e
   end
 end
@@ -143,11 +163,11 @@ lane :do_upload_firim do
       message: "Hi! @archon \r\n A new app uploading \r\nFlavor: #{flavor}",
       default_payloads: [:git_branch, :lane, :git_author]
     )
-    wechatwork(
-      webhook: ENV['Android_GROUP'],
-      markdown: "A new app uploading. \r\nFlavor: #{flavor}",
-      mentioned_mobile_list: []
-    )
+    #wechatwork(
+    #  webhook: ENV['Android_GROUP'],
+    #  markdown: "A new app uploading. \r\nFlavor: #{flavor}",
+    #  mentioned_mobile_list: []
+    #)
     change_log = "[#{flavor}]+[#{ENV['GIT_BRANCH']}]\r\n---\r\n" + ENV['CHANGELOG']
     firim(
       apk: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH],
@@ -160,11 +180,11 @@ lane :do_upload_firim do
       success: true,
       default_payloads: [:git_branch, :lane, :git_author, :test_result]
     )
-    wechatwork(
-      webhook: ENV['Android_GROUP'],
-      markdown: "Upload <font color=\"info\">success</font>. \r\nFlavor: #{flavor}",
-      mentioned_mobile_list: []
-    )
+    #wechatwork(
+    #  webhook: ENV['Android_GROUP'],
+    #  markdown: "Upload <font color=\"info\">success</font>. \r\nFlavor: #{flavor}",
+    #  mentioned_mobile_list: []
+    #)
 
     $upload_retry=0
   rescue => ex
@@ -177,11 +197,12 @@ lane :do_upload_firim do
         success: false,
         default_payloads: [:git_branch, :lane, :git_author, :test_result]
       )
-      wechatwork(
-        webhook: ENV['Android_GROUP'],
-        markdown: "Upload <font color=\"warning\">failed</font>. \r\nFlavor: #{flavor}",
-        mentioned_mobile_list: []
-      )
+      #wechatwork(
+      #  webhook: ENV['Android_GROUP'],
+      #  markdown: "Upload <font color=\"warning\">failed</font>. \r\nFlavor: #{flavor}",
+      #  mentioned_mobile_list: []
+      #)
+
       # raise ex
       puts ex
     end
@@ -197,11 +218,11 @@ after_all do |lane, options|
     message: "Hi! @channel \r\n A new build end",
     default_payloads: [:git_branch, :lane, :git_author]
   )
-  wechatwork(
-    webhook: ENV['Android_GROUP2'],
-    markdown: "**Android #{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD Ended** \r\n\n  #{ENV['CHANGELOG']}",
-    mentioned_mobile_list: ENV['PHONE']
-  )
+  #wechatwork(
+  #  webhook: ENV['Android_GROUP2'],
+  #  markdown: "**Android #{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD Ended** \r\n\n  #{ENV['CHANGELOG']}",
+  #  mentioned_mobile_list: ENV['PHONE']
+  #)
 end
 
 error do |lane, exception, options|
