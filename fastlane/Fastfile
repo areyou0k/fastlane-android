@@ -27,18 +27,18 @@ before_all do |lane, options|
     default_payloads: [:git_branch, :lane, :git_author]
   )
 
-  wechatwork(
-    webhook: ENV['Android_Dev'],
-    markdown: "**#{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD START** \r\n\n  #{ENV['CHANGELOG']}",
-    mentioned_mobile_list: []
-  )
+  #wechatwork(
+  #  webhook: ENV['Android_Dev'],
+  #  markdown: "**#{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD START** \r\n\n  #{ENV['CHANGELOG']}",
+  #  mentioned_mobile_list: []
+  #)
 
   gradle(
     task: "-v"
   )
-  gradle(
-    task: "clean"
-  )
+  #gradle(
+  #  task: "clean"
+  #)
 end
 
 
@@ -138,10 +138,8 @@ lane :do_publish_china do |options|
   #  build_type: "Release",
   #  print_command_output: false
   #  )
-  if do_compile_china
-    do_upload_firim
-  else
-  end
+  #do_compile_china
+  do_upload_firim
 end
 
 desc "Submit a new Release Build to Google"
@@ -152,10 +150,8 @@ lane :do_publish_google do |options|
   #  build_type: "Release",
   #  print_command_output: false
   #)
-  if do_compile_google
-    do_upload_firim
-  else
-  end
+  #do_compile_google
+  do_upload_firim
 end
 
 $upload_retry=0
