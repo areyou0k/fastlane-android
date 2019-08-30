@@ -93,6 +93,8 @@ lane :do_compile_china do |options|
       mentioned_mobile_list: []
       )
     puts e
+    UI.error e
+    UI.user_error!("Whoops, something went wrong")
   end
 end
 
@@ -127,6 +129,8 @@ lane :do_compile_google do |options|
       mentioned_mobile_list: []
       )
     puts e
+    UI.error e
+    UI.user_error!("Whoops, something went wrong")
   end
 end
 
@@ -210,6 +214,8 @@ lane :do_upload_firim do
       )
 
       # raise ex
+      UI.error e
+      UI.user_error!("Whoops, something went wrong")
       puts ex
     end
   end
