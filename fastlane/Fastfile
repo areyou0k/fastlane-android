@@ -19,7 +19,7 @@ before_all do |lane, options|
   ENV['Android_Dev'] = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e87d05fe-5255-4629-b448-5270f497cba2'
   ENV['Android_ALL'] = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=59122387-2ec3-4cad-932e-0979efa71f89'
 
-  phone_list = "18779144521,18126009603,18273141743,17620943723"
+  phone_list = "18779144521,18126009603"
   ENV['PHONE'] = phone_list + "," + ENV['PHONE']
 
   slack(
@@ -72,24 +72,24 @@ lane :do_compile_china do |options|
       print_command_output: false
       )
     slack(
-      message: "Gradle task for China flavor success.",
+      message: "Gradle task for China success.",
       success: true,
       default_payloads: []
       )
     wechatwork(
       webhook: ENV['Android_Dev'],
-      markdown: "Gradle task for China flavor <font color=\"info\">success</font>.",
+      markdown: "Gradle task for China <font color=\"info\">success</font>.",
       mentioned_mobile_list: []
       )
   rescue => e
     slack(
-      message: "Gradle task for China flavor failed.",
+      message: "Gradle task for China failed.",
       success: true,
       default_payloads: []
       )
     wechatwork(
       webhook: ENV['Android_Dev'],
-      markdown: "Gradle task for China flavor <font color=\"warning\">failed</font>.",
+      markdown: "Gradle task for China <font color=\"warning\">failed</font>.",
       mentioned_mobile_list: []
       )
     puts e
@@ -108,24 +108,24 @@ lane :do_compile_google do |options|
       print_command_output: false
       )
     slack(
-      message: "Gradle task for Google flavor success.",
+      message: "Gradle task for Google success.",
       success: true,
       default_payloads: []
       )
     wechatwork(
       webhook: ENV['Android_Dev'],
-      markdown: "Gradle task for Google flavor <font color=\"info\">success</font>.",
+      markdown: "Gradle task for Google <font color=\"info\">success</font>.",
       mentioned_mobile_list: []
       )
   rescue Exception => e
     slack(
-      message: "Gradle task for Google flavor failed.",
+      message: "Gradle task for Google failed.",
       success: true,
       default_payloads: []
       )
     wechatwork(
       webhook: ENV['Android_Dev'],
-      markdown: "Gradle task for Google flavor <font color=\"warning\">failed</font>.",
+      markdown: "Gradle task for Google <font color=\"warning\">failed</font>.",
       mentioned_mobile_list: []
       )
     puts e
