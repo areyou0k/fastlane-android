@@ -57,7 +57,7 @@ lane :do_publish_all do |options|
     )
   wechatwork(
     webhook: ENV['Android_ALL'],
-    markdown: "**Android #{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD Ended** \r\n\n  #{ENV['CHANGELOG']}",
+    markdown: "**Android #{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']})** \r\n\n  #{ENV['CHANGELOG']}",
     mentioned_mobile_list: ENV['PHONE']
    )
 end
@@ -138,10 +138,10 @@ lane :do_publish_china do |options|
   #  build_type: "Release",
   #  print_command_output: false
   #  )
-  #if do_compile_china
+  if do_compile_china
     do_upload_firim
-  #else
-  #end
+  else
+  end
 end
 
 desc "Submit a new Release Build to Google"
@@ -152,10 +152,10 @@ lane :do_publish_google do |options|
   #  build_type: "Release",
   #  print_command_output: false
   #)
-  #if do_compile_google
+  if do_compile_google
     do_upload_firim
-  #else
-  #end
+  else
+  end
 end
 
 $upload_retry=0
@@ -230,7 +230,7 @@ after_all do |lane, options|
   )
   wechatwork(
     webhook: ENV['Android_Dev'],
-    markdown: "**Android #{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD Ended** \r\n\n  #{ENV['CHANGELOG']}",
+    markdown: "**Android #{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD Ended**",
     mentioned_mobile_list: []
   )
 end
