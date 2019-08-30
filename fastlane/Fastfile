@@ -17,7 +17,7 @@ before_all do |lane, options|
   )
 
   slack(
-    message: "Hi! @channel \r\n A new build start \r\n#{ENV['PHONE']}",
+    message: "Hi! @channel \r\n A new build start",
     default_payloads: [:git_branch, :lane, :git_author]
   )
 
@@ -50,6 +50,11 @@ desc "Submit a new Release Build to all"
 lane :do_publish_all do |options|
   do_publish_china
   do_publish_google
+  slack(
+    message: "All upload success. \r\n#{ENV['CHANGELOG']}",
+    success: true,
+    default_payloads: [:git_branch, :lane, :git_author, :test_result]
+    )
 end
 
 desc "Compile China flavor."
