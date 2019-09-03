@@ -48,7 +48,7 @@ end
 
 desc "Increase version code"
 lane :do_increase_version_code do |options|
-  inc_version_code = increase_version_code().tr(",","")
+  sh(sed  -i'' -e "s/versionCode      : #{ENV['VERSIONCODE']}/versionCode      : $[#{ENV['VERSIONCODE']}+1]/g" config.gradle)
   wechatwork(
     webhook: ENV['Android_Dev'],
     markdown: "#{ENV['VERSIONNAME']} versionCode changed into (#{inc_version_code}) now.",
