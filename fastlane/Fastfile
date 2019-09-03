@@ -59,6 +59,7 @@ desc "Submit a new Release Build to all"
 lane :do_publish_all do |options|
   do_publish_china
   do_publish_google
+  do_wechat_all
   slack(
     message: "All upload success. \r\n#{ENV['CHANGELOG']}",
     success: true,
