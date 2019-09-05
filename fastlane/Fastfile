@@ -71,7 +71,7 @@ desc "Compile China flavor."
 lane :do_compile_china do |options|
   begin
     gradle(
-      task: "assemble",
+      task: "-s >/tmp/jenkins_gradle.log 2>&1 assemble",
       flavor: "China",
       build_type: "Release",
       print_command_output: false
