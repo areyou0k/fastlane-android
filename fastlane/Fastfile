@@ -71,7 +71,7 @@ desc "Compile China flavor."
 lane :do_compile_china do |options|
   begin
     gradle(
-      task: "-s >/tmp/jenkins_gradle.log 2>&1 assemble",
+      task: "-v",
       flavor: "China",
       build_type: "Release",
       print_command_output: false
@@ -107,7 +107,7 @@ desc "Compile Google flavor."
 lane :do_compile_google do |options|
   begin
     gradle(
-      task: "assemble",
+      task: "-v",
       flavor: "Google",
       build_type: "Release",
       print_command_output: false
@@ -147,7 +147,7 @@ lane :do_publish_china do |options|
   #  build_type: "Release",
   #  print_command_output: false
   #  )
-  #do_compile_china
+  do_compile_china
   do_upload_firim
 end
 
@@ -159,7 +159,7 @@ lane :do_publish_google do |options|
   #  build_type: "Release",
   #  print_command_output: false
   #)
-  #do_compile_google
+  do_compile_google
   do_upload_firim
 end
 
