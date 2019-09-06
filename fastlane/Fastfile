@@ -33,12 +33,12 @@ before_all do |lane, options|
     mentioned_mobile_list: []
   )
 
-  gradle(
-    task: "-v"
-  )
-  gradle(
-    task: "clean"
-  )
+  #gradle(
+  #  task: "-v"
+  #)
+  #gradle(
+  #  task: "clean"
+  #)
 end
 
 
