@@ -71,7 +71,7 @@ desc "Compile China flavor."
 lane :do_compile_china do |options|
   begin
     gradle(
-      task: "-v",
+      task: "-v ",
       flavor: "China",
       build_type: "Release",
       print_command_output: false
@@ -107,7 +107,7 @@ desc "Compile Google flavor."
 lane :do_compile_google do |options|
   begin
     gradle(
-      task: "-v",
+      task: "-v ",
       flavor: "Google",
       build_type: "Release",
       print_command_output: false
