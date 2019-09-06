@@ -174,10 +174,13 @@ lane :do_upload_firim do
   puts get_version_code().tr(",","")
   begin
     flavor = lane_context[SharedValues::GRADLE_FLAVOR] || /([^\/-]*)(?=-[^\/-]*\.apk$)/.match(apk)
-    #slack(
-    #  message: "Hi! @archon \r\n A new app uploading \r\nFlavor: #{flavor}",
-    #  default_payloads: [:git_branch, :lane, :git_author]
-    #)
+    if flavor == "China"
+      lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/Users/mac/Library/Jenkins-slave1/workspace/test_dev/HelloTalk/build/outputs/apk/china/release/HelloTalk-china-release.apk"
+    elsif flavor == "Google"
+      lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/Users/mac/Library/Jenkins-slave1/workspace/test_dev/HelloTalk/build/outputs/apk/google/release/HelloTalk-google-release.apk"
+    else
+      UI.user_error!("No flavor defined.")      
+    end
     wechatwork(
       webhook: ENV['Android_Dev'],
       markdown: "A new app uploading. \r\nFlavor: #{flavor}",
