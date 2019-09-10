@@ -28,11 +28,11 @@ before_all do |lane, options|
   #  default_payloads: [:git_branch, :lane, :git_author]
   #)
 
-  wechatwork(
-    webhook: ENV['Android_Dev'],
-    markdown: "**#{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD START** \r\n\n  #{ENV['CHANGELOG']}",
-    mentioned_mobile_list: []
-  )
+  #wechatwork(
+  #  webhook: ENV['Android_Dev'],
+  #  markdown: "**#{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD START** \r\n\n  #{ENV['CHANGELOG']}",
+  #  mentioned_mobile_list: []
+  #)
 
   #gradle(
   #  task: "-v"
@@ -50,7 +50,7 @@ end
 desc "wechatwork notification send to all whel all step success."
 lane :do_wechat_all do |options|
   wechatwork(
-    webhook: ENV['Android_ALL'],
+    webhook: ENV['Android_Dev'],
     markdown: "**Android #{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']})** \r\n\n  #{ENV['CHANGELOG']}",
     mentioned_mobile_list: ENV['PHONE']
   )
@@ -82,22 +82,22 @@ lane :do_compile_china do |options|
     #  success: true,
     #  default_payloads: []
     #  )
-    wechatwork(
-      webhook: ENV['Android_Dev'],
-      markdown: "Gradle task for China <font color=\"info\">success</font>.",
-      mentioned_mobile_list: []
-      )
+    #wechatwork(
+    #  webhook: ENV['Android_Dev'],
+    #  markdown: "Gradle task for China <font color=\"info\">success</font>.",
+    #  mentioned_mobile_list: []
+    #  )
   rescue => e
     #slack(
     #  message: "Gradle task for China failed.",
     #  success: true,
     #  default_payloads: []
     #  )
-    wechatwork(
-      webhook: ENV['Android_Dev'],
-      markdown: "Gradle task for China <font color=\"warning\">failed</font>.",
-      mentioned_mobile_list: []
-      )
+    #wechatwork(
+    #  webhook: ENV['Android_Dev'],
+    #  markdown: "Gradle task for China <font color=\"warning\">failed</font>.",
+    #  mentioned_mobile_list: []
+    #  )
     puts e
     UI.error e
     UI.user_error!("Whoops, something went wrong")
@@ -118,22 +118,22 @@ lane :do_compile_google do |options|
     #  success: true,
     #  default_payloads: []
     #  )
-    wechatwork(
-      webhook: ENV['Android_Dev'],
-      markdown: "Gradle task for Google <font color=\"info\">success</font>.",
-      mentioned_mobile_list: []
-      )
+    #wechatwork(
+    #  webhook: ENV['Android_Dev'],
+    #  markdown: "Gradle task for Google <font color=\"info\">success</font>.",
+    #  mentioned_mobile_list: []
+    #  )
   rescue Exception => e
     #slack(
     #  message: "Gradle task for Google failed.",
     #  success: true,
     #  default_payloads: []
     #  )
-    wechatwork(
-      webhook: ENV['Android_Dev'],
-      markdown: "Gradle task for Google <font color=\"warning\">failed</font>.",
-      mentioned_mobile_list: []
-      )
+    #wechatwork(
+    #  webhook: ENV['Android_Dev'],
+    #  markdown: "Gradle task for Google <font color=\"warning\">failed</font>.",
+    #  mentioned_mobile_list: []
+    #  )
     puts e
     UI.error e
     UI.user_error!("Whoops, something went wrong")
