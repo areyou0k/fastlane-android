@@ -45,7 +45,7 @@ module Fastlane
           request.basic_auth('zhangfeng', '12345678')
         
           response = http.request(request)
-          puts "Change workflow_id to 91."
+          puts "Change workflow to BUILT(id: 91)."
           puts response.code
         end 
       end

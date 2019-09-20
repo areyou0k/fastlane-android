@@ -76,7 +76,7 @@ end
 desc "wechatwork notification send to all whel all step success."
 lane :do_wechat_all do |options|
   wechatwork(
-    webhook: ENV['Android_Dev'],
+    webhook: ENV['Android_ALL'],
     markdown: "**Android #{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']})** \r\n\n  #{ENV['CHANGELOG']}",
     mentioned_mobile_list: ENV['PHONE']
   )
@@ -178,11 +178,11 @@ lane :do_upload_firim do
   begin
     flavor = lane_context[SharedValues::GRADLE_FLAVOR] || /([^\/-]*)(?=-[^\/-]*\.apk$)/.match(apk)
     if flavor == "China"
-      #lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/Users/mac/Library/Jenkins-slave1/workspace/test_dev/HelloTalk/build/outputs/apk/china/release/HelloTalk-china-release.apk"
-      lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/tmp/HelloTalk-china-release.apk"
+      lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/Users/mac/Library/Jenkins-slave1/workspace/test_dev/HelloTalk/build/outputs/apk/china/release/HelloTalk-china-release.apk"
+      #lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/tmp/HelloTalk-china-release.apk"
     elsif flavor == "Google"
-      #lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/Users/mac/Library/Jenkins-slave1/workspace/test_dev/HelloTalk/build/outputs/apk/google/release/HelloTalk-google-release.apk"
-      lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/tmp/HelloTalk-google-release.apk"
+      lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/Users/mac/Library/Jenkins-slave1/workspace/test_dev/HelloTalk/build/outputs/apk/google/release/HelloTalk-google-release.apk"
+      #lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/tmp/HelloTalk-google-release.apk"
     else
       UI.user_error!("No flavor defined.")      
     end
