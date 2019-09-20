@@ -61,10 +61,15 @@ before_each do |lane, options|
   # ...
 end
 
-desc "Submit a new Release Build to all"
+desc "Change jira issue."
 lane :do_jira_issue do |options|
   jirastatus(
     log: ENV['log_raw']
+  )
+  wechatwork(
+    webhook: ENV['Android_Dev'],
+    markdown: "Change jira issue <font color=\"info\">success</font>.",
+    mentioned_mobile_list: []
   )
 end
 
