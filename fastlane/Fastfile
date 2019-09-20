@@ -5,11 +5,26 @@ before_all do |lane, options|
   ENV["GIT_BRANCH"] = git_branch
   ENV['VERSIONNAME'] ||= get_version_name().tr(",","")
   ENV['VERSIONCODE'] ||= get_version_code().tr(",","")
-  ENV['CHANGELOG'] = read_changelog(
+  log_raw = read_changelog(
     changelog_path: './CHANGELOG.md',
     section_identifier: '[Unreleased]',
     excluded_markdown_elements: ['-', '###']
   )
+  
+  ENV['log_raw'] = log_raw
+
+  if log_raw != nil
+    log_arr = log_raw.split("\n")
+    for item in log_arr do
+      item_strip = item.strip
+      if item_strip.length > 0
+        markdown = item_strip.match(/^>.*\[.*\]\(.*\)/)
+      end
+    end
+  end
+
+  ENV['CHANGELOG'] = markdown
+  
   ENV['PHONE'] = read_changelog(
     changelog_path: './CHANGELOG.md',
     section_identifier: '[Phone]',
@@ -22,11 +37,6 @@ before_all do |lane, options|
 
   phone_list = "18779144521,18126009603"
   ENV['PHONE'] = phone_list + "," + ENV['PHONE']
-
-  #slack(
-  #  message: "Hi! @channel \r\n A new build start",
-  #  default_payloads: [:git_branch, :lane, :git_author]
-  #)
 
   #wechatwork(
   #  webhook: ENV['Android_Dev'],
@@ -61,11 +71,6 @@ lane :do_publish_all do |options|
   do_publish_china
   do_publish_google
   do_wechat_all
-  #slack(
-  #  message: "All upload success. \r\n#{ENV['CHANGELOG']}",
-  #  success: true,
-  #  default_payloads: [:git_branch, :lane, :git_author, :test_result]
-  #  )
 end
 
 desc "Compile China flavor."
@@ -77,22 +82,12 @@ lane :do_compile_china do |options|
       build_type: "Release",
       print_command_output: false
       )
-    #slack(
-    #  message: "Gradle task for China success.",
-    #  success: true,
-    #  default_payloads: []
-    #  )
     #wechatwork(
     #  webhook: ENV['Android_Dev'],
     #  markdown: "Gradle task for China <font color=\"info\">success</font>.",
     #  mentioned_mobile_list: []
     #  )
   rescue => e
-    #slack(
-    #  message: "Gradle task for China failed.",
-    #  success: true,
-    #  default_payloads: []
-    #  )
     #wechatwork(
     #  webhook: ENV['Android_Dev'],
     #  markdown: "Gradle task for China <font color=\"warning\">failed</font>.",
@@ -113,22 +108,12 @@ lane :do_compile_google do |options|
       build_type: "Release",
       print_command_output: false
       )
-    #slack(
-    #  message: "Gradle task for Google success.",
-    #  success: true,
-    #  default_payloads: []
-    #  )
     #wechatwork(
     #  webhook: ENV['Android_Dev'],
     #  markdown: "Gradle task for Google <font color=\"info\">success</font>.",
     #  mentioned_mobile_list: []
     #  )
   rescue Exception => e
-    #slack(
-    #  message: "Gradle task for Google failed.",
-    #  success: true,
-    #  default_payloads: []
-    #  )
     #wechatwork(
     #  webhook: ENV['Android_Dev'],
     #  markdown: "Gradle task for Google <font color=\"warning\">failed</font>.",
@@ -196,11 +181,6 @@ lane :do_upload_firim do
       app_build_version: get_version_code().tr(",",""),
       app_changelog: change_log
     )
-    #slack(
-    #  message: "Hi! @archon \r\n A new app upload success \r\nFlavor: #{flavor} \r\n#{ENV['CHANGELOG']}",
-    #  success: true,
-    #  default_payloads: [:git_branch, :lane, :git_author, :test_result]
-    #)
     wechatwork(
       webhook: ENV['Android_Dev'],
       markdown: "Upload <font color=\"info\">success</font>. \r\nFlavor: #{flavor}",
@@ -213,11 +193,6 @@ lane :do_upload_firim do
     if $upload_retry < 3
       do_upload_firim
     else
-      #slack(
-      #  message: "Hi! @archon \r\n A new app upload failed \r\nFlavor: #{flavor}",
-      #  success: false,
-      #  default_payloads: [:git_branch, :lane, :git_author, :test_result]
-      #)
       wechatwork(
         webhook: ENV['Android_Dev'],
         markdown: "Upload <font color=\"warning\">failed</font>. \r\nFlavor: #{flavor}",
@@ -237,10 +212,6 @@ after_each do |lane, options|
 end
 
 after_all do |lane, options|
-  #slack(
-  #  message: "Hi! @channel \r\n A new build end",
-  #  default_payloads: [:git_branch, :lane, :git_author]
-  #)
   wechatwork(
     webhook: ENV['Android_Dev'],
     markdown: "**Android #{ENV['VERSIONNAME']} (#{ENV['VERSIONCODE']}) BUILD Ended** \r\n\n  #{ENV['CHANGELOG']}",
