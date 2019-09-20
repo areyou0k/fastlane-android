@@ -23,6 +23,7 @@ before_all do |lane, options|
         markdown.push("#{text}")
       end
     end
+    markdown = markdown.join("\n\n")
     puts markdown
   end
 
