@@ -61,6 +61,13 @@ before_each do |lane, options|
   # ...
 end
 
+desc "Submit a new Release Build to all"
+lane :do_jira_issue do |options|
+  jirastatus(
+    log: ENV['log_raw']
+  )
+end
+
 desc "wechatwork notification send to all whel all step success."
 lane :do_wechat_all do |options|
   wechatwork(
@@ -74,6 +81,7 @@ desc "Submit a new Release Build to all"
 lane :do_publish_all do |options|
   do_publish_china
   do_publish_google
+  do_jira_issue
   do_wechat_all
 end
 
