@@ -23,7 +23,7 @@ before_all do |lane, options|
         markdown.push("#{text}")
       end
     end
-    markdown = markdown.join("\n\n")
+    markdown = markdown.join("\n")
     puts markdown
   end
 
@@ -165,9 +165,11 @@ lane :do_upload_firim do
   begin
     flavor = lane_context[SharedValues::GRADLE_FLAVOR] || /([^\/-]*)(?=-[^\/-]*\.apk$)/.match(apk)
     if flavor == "China"
-      lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/Users/mac/Library/Jenkins-slave1/workspace/test_dev/HelloTalk/build/outputs/apk/china/release/HelloTalk-china-release.apk"
+      #lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/Users/mac/Library/Jenkins-slave1/workspace/test_dev/HelloTalk/build/outputs/apk/china/release/HelloTalk-china-release.apk"
+      lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/tmp/HelloTalk-china-release.apk"
     elsif flavor == "Google"
-      lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/Users/mac/Library/Jenkins-slave1/workspace/test_dev/HelloTalk/build/outputs/apk/google/release/HelloTalk-google-release.apk"
+      #lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/Users/mac/Library/Jenkins-slave1/workspace/test_dev/HelloTalk/build/outputs/apk/google/release/HelloTalk-google-release.apk"
+      lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/tmp/HelloTalk-google-release.apk"
     else
       UI.user_error!("No flavor defined.")      
     end
