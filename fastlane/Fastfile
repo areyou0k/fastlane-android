@@ -10,17 +10,20 @@ before_all do |lane, options|
     section_identifier: '[Unreleased]',
     excluded_markdown_elements: ['-', '###']
   )
-  
-  ENV['log_raw'] = log_raw
 
+  ENV['log_raw'] = log_raw
+  
+  markdown = []
   if log_raw != nil
     log_arr = log_raw.split("\n")
     for item in log_arr do
       item_strip = item.strip
       if item_strip.length > 0
-        markdown = item_strip.match(/^>.*\[.*\]\(.*\)/)
+        text = item_strip.match(/^>.*\[.*\]\(.*\)/)
+        markdown.push("#{text}")
       end
     end
+    puts markdown
   end
 
   ENV['CHANGELOG'] = markdown
