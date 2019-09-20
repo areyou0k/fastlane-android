@@ -39,31 +39,13 @@ module Fastlane
 
       end
 
-      # def self.post_to_wechat(webhook, params)
-      #   require 'net/http'
-      #   require 'uri'
-      #   require 'json'
-
-      #   uri = URI.parse("#{webhook}")
-      #   http = Net::HTTP.new(uri.host, uri.port)
-      #   http.use_ssl = true
-
-      #   # 设置请求参数
-      #   data = params.to_json
-
-      #   # 设置请求头
-      #   header = {'Content-Type':'application/json'}
-      #   response = http.post(uri, data, header)
-      #   self.check_response(response)
-      # end
-
       def self.change_workflow_status(issue)
         require 'net/http'
         require 'net/https'
         require 'uri'
         require 'json'
         api = "https://jira.hellotalk8.com/jira/rest/api/2/issue/"
-        url = api + "#{issue}" + "/transitions"
+        url = api + "#{issue['issue']}" + "/transitions"
         uri = URI(url)
         header = {"Content-Type": "application/json"}
         workflow_id = {"transition":{"id":"91"}}
