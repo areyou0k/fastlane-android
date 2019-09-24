@@ -15,10 +15,11 @@ module Fastlane
           for item in log_arr do
               item_strip = item.strip
             if item_strip.include? "https://jira.hellotalk8.com/jira/browse/"
-              issue = item_strip.gsub(/.*\(https:\/\/jira.hellotalk8.com\/jira\/browse\//, '{"issue": "').gsub(/\).*\[Assignee\]/, '", "user": "') + '"}'
+              # issue = item_strip.gsub(/.*\(https:\/\/jira.hellotalk8.com\/jira\/browse\//, '{"issue": "').gsub(/\).*\[Assignee\]/, '", "user": "') + '"}'
+              issue = item_strip.gsub(/.*\(https:\/\/jira.hellotalk8.com\/jira\/browse\//, '{"issue": "').gsub(/\)/, '') + '"}'
               issue_json = JSON.parse(issue)
               puts issue_json
-              self.change_assignee(issue_json)
+              # self.change_assignee(issue_json)
               self.change_workflow_status(issue_json)
             end
           end
