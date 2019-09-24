@@ -27,7 +27,7 @@ before_all do |lane, options|
     puts markdown
   end
 
-  ENV['CHANGELOG'] = markdown
+  ENV['CHANGELOG'] = ENV['log_raw']
   
   ENV['PHONE'] = read_changelog(
     changelog_path: './CHANGELOG.md',

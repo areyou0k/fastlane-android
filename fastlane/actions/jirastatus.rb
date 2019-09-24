@@ -32,6 +32,7 @@ module Fastlane
         require 'json'
         api = "https://jira.hellotalk8.com/jira/rest/api/2/issue/"
         url = api + "#{issue['issue']}" + "/transitions"
+        puts url
         uri = URI(url)
         header = {"Content-Type": "application/json"}
         workflow_id = {"transition":{"id":"91"}}
@@ -57,8 +58,8 @@ module Fastlane
         require 'json'
         api = "https://jira.hellotalk8.com/jira/rest/api/2/issue/"
         url = api + "#{issue['issue']}"
-        uri = URI(url)
         puts url
+        uri = URI(url)
         header = {"Content-Type": "application/json"}
         if "#{issue['user']}" != nil
           assig = {"update": {"assignee": [{"set": {"name": "#{issue['user']}"}}]}}
