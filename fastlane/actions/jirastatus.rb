@@ -122,7 +122,7 @@ module Fastlane
       #   end   
       # end
 
-      def change_assignee(issue)
+      def self.change_assignee(issue)
         require 'net/http'
         require 'net/https'
         require 'uri'
