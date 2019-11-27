@@ -9,6 +9,8 @@ module Fastlane
         end
 
         log = options[:log]
+        jira_user = "jenkins"
+        passwd = "jenkinsauto"
 
         if log != nil
           log_arr = log.split("\n")
@@ -83,7 +85,7 @@ module Fastlane
 
           request = Net::HTTP::Post.new(uri.request_uri, header)
           request.body = workflow_id.to_json
-          request.basic_auth('zhangfeng', '12345678')
+          request.basic_auth("#{jira_user}", "#{passwd}")
 
           response = http.request(request)
           puts "Change workflow status code: #{response.code}"
@@ -108,7 +110,7 @@ module Fastlane
 
           #Get assignee info.
           request = Net::HTTP::Get.new(uri.request_uri, header)
-          request.basic_auth('zhangfeng', '12345678')
+          request.basic_auth("#{jira_user}", "#{passwd}")
 
           response = http.request(request)
           full_json = JSON.parse(response.body)
