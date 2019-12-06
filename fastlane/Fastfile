@@ -94,7 +94,7 @@ lane :do_publish_all do |options|
   do_publish_china
   do_publish_google
   do_jira_issue
-  if ENV['TRIGER'] != 1
+  if ENV['TRIGER'] != "1"
     #do_wechat_all
     puts "do not send message to that fucking group."
   end
@@ -161,7 +161,7 @@ lane :do_publish_china do |options|
   #  print_command_output: false
   #  )
   do_compile_china
-  if ENV['TRIGER'] != 1
+  if ENV['TRIGER'] != "1"
     do_upload_firim
   end
 end
@@ -175,7 +175,7 @@ lane :do_publish_google do |options|
   #  print_command_output: false
   #)
   do_compile_google
-  if ENV['TRIGER'] != 1
+  if ENV['TRIGER'] != "1"
     do_upload_firim
   end
 end
