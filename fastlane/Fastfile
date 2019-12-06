@@ -35,7 +35,7 @@ before_all do |lane, options|
     excluded_markdown_elements: ['-', '###']
   )
 
-  # "1" means do not upload
+  # "1" means do not upload and group notify.
   ENV['TRIGER'] = read_changelog(
     changelog_path: './CHANGELOG.md',
     section_identifier: '[Triger]',
@@ -95,8 +95,7 @@ lane :do_publish_all do |options|
   do_publish_google
   do_jira_issue
   if ENV['TRIGER'] != "1"
-    #do_wechat_all
-    puts "do not send message to that fucking group."
+    do_wechat_all
   end
 end
 
