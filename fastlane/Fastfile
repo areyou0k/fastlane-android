@@ -42,6 +42,13 @@ before_all do |lane, options|
     excluded_markdown_elements: ['-', '###']
   )
 
+  # "1" means compile htprivate.
+  ENV['HTFLAVOR'] = read_changelog(
+    changelog_path: './CHANGELOG.md',
+    section_identifier: '[Flavor]',
+    excluded_markdown_elements: ['-', '###']
+  )
+
   ENV['Android_Dev'] = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e87d05fe-5255-4629-b448-5270f497cba2'
   ENV['Android_ALL'] = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=07b1fe20-a3e6-47e9-95e9-c381c967d703'
   #ENV['Android_ALL'] = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=59122387-2ec3-4cad-932e-0979efa71f89'
@@ -55,12 +62,12 @@ before_all do |lane, options|
   #  mentioned_mobile_list: []
   #)
 
-  #gradle(
+  # gradle(
   #  task: "-v"
-  #)
-  #gradle(
-  #  task: "clean"
-  #)
+  # )
+  gradle(
+   task: "clean"
+  )
 end
 
 
@@ -94,31 +101,36 @@ lane :do_publish_all do |options|
   do_publish_china
   do_publish_google
   do_jira_issue
-  if ENV['TRIGER'] != "1"
-    do_wechat_all
+
+  if ENV['HTFLAVOR'] = "1"
+    do_publish_htprivate
   end
+
+  # if ENV['TRIGER'] != "1"
+  #   do_wechat_all
+  # end
 end
 
 desc "Compile China flavor."
 lane :do_compile_china do |options|
   begin
     gradle(
-      task: "-v ",
+      task: "assemble",
       flavor: "China",
       build_type: "Release",
       print_command_output: false
       )
-    #wechatwork(
-    #  webhook: ENV['Android_Dev'],
-    #  markdown: "Gradle task for China <font color=\"info\">success</font>.",
-    #  mentioned_mobile_list: []
-    #  )
+    wechatwork(
+     webhook: ENV['Android_Dev'],
+     markdown: "Gradle task for China <font color=\"info\">success</font>.",
+     mentioned_mobile_list: []
+     )
   rescue => e
-    #wechatwork(
-    #  webhook: ENV['Android_Dev'],
-    #  markdown: "Gradle task for China <font color=\"warning\">failed</font>.",
-    #  mentioned_mobile_list: []
-    #  )
+    wechatwork(
+     webhook: ENV['Android_Dev'],
+     markdown: "Gradle task for China <font color=\"warning\">failed</font>.",
+     mentioned_mobile_list: []
+     )
     puts e
     UI.error e
     UI.user_error!("Whoops, something went wrong")
@@ -129,22 +141,48 @@ desc "Compile Google flavor."
 lane :do_compile_google do |options|
   begin
     gradle(
-      task: "-v ",
+      task: "assemble",
       flavor: "Google",
       build_type: "Release",
       print_command_output: false
       )
-    #wechatwork(
-    #  webhook: ENV['Android_Dev'],
-    #  markdown: "Gradle task for Google <font color=\"info\">success</font>.",
-    #  mentioned_mobile_list: []
-    #  )
+    wechatwork(
+     webhook: ENV['Android_Dev'],
+     markdown: "Gradle task for Google <font color=\"info\">success</font>.",
+     mentioned_mobile_list: []
+     )
   rescue Exception => e
-    #wechatwork(
-    #  webhook: ENV['Android_Dev'],
-    #  markdown: "Gradle task for Google <font color=\"warning\">failed</font>.",
-    #  mentioned_mobile_list: []
-    #  )
+    wechatwork(
+     webhook: ENV['Android_Dev'],
+     markdown: "Gradle task for Google <font color=\"warning\">failed</font>.",
+     mentioned_mobile_list: []
+     )
+    puts e
+    UI.error e
+    UI.user_error!("Whoops, something went wrong")
+  end
+end
+
+desc "Compile htprivate flavor."
+lane :do_compile_htprivate do |options|
+  begin
+    gradle(
+      task: "assemble",
+      flavor: "Htprivate",
+      build_type: "Release",
+      print_command_output: false
+      )
+    wechatwork(
+     webhook: ENV['Android_Dev'],
+     markdown: "Gradle task for Private <font color=\"info\">success</font>.",
+     mentioned_mobile_list: []
+     )
+  rescue Exception => e
+    wechatwork(
+     webhook: ENV['Android_Dev'],
+     markdown: "Gradle task for Private <font color=\"warning\">failed</font>.",
+     mentioned_mobile_list: []
+     )
     puts e
     UI.error e
     UI.user_error!("Whoops, something went wrong")
@@ -179,6 +217,20 @@ lane :do_publish_google do |options|
   end
 end
 
+desc "Submit a new Release Build to htprivate"
+lane :do_publish_htprivate do |options|
+  #gradle(
+  #  task: "assemble",
+  #  flavor: "Htprivate",
+  #  build_type: "Release",
+  #  print_command_output: false
+  #)
+  do_compile_htprivate
+  if ENV['TRIGER'] != "1"
+    do_upload_firim
+  end
+end
+
 $upload_retry=0
 
 lane :do_upload_firim do
@@ -190,20 +242,18 @@ lane :do_upload_firim do
   puts get_version_code().tr(",","")
   begin
     flavor = lane_context[SharedValues::GRADLE_FLAVOR] || /([^\/-]*)(?=-[^\/-]*\.apk$)/.match(apk)
-    if flavor == "China"
-      lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/Users/mac/Library/Jenkins-slave1/workspace/test_dev/HelloTalk/build/outputs/apk/china/release/HelloTalk-china-release.apk"
-      #lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/tmp/HelloTalk-china-release.apk"
-    elsif flavor == "Google"
-      lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/Users/mac/Library/Jenkins-slave1/workspace/test_dev/HelloTalk/build/outputs/apk/google/release/HelloTalk-google-release.apk"
-      #lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/tmp/HelloTalk-google-release.apk"
-    else
-      UI.user_error!("No flavor defined.")      
-    end
+    # if flavor == "China"
+    #   lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/Users/mac/Library/Jenkins-slave1/workspace/test_dev/HelloTalk/build/outputs/apk/china/release/HelloTalk-china-release.apk"
+    # elsif flavor == "Google"
+    #   lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] = "/Users/mac/Library/Jenkins-slave1/workspace/test_dev/HelloTalk/build/outputs/apk/google/release/HelloTalk-google-release.apk"
+    # else
+    #   UI.user_error!("No flavor defined.")      
+    # end
 
     puts lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
     wechatwork(
       webhook: ENV['Android_Dev'],
-      markdown: "A new app uploading. \r\nFlavor: #{flavor}",
+      markdown: "Flavor: #{flavor} app uploading.",
       mentioned_mobile_list: []
     )
     change_log = "[#{flavor}]+[#{ENV['GIT_BRANCH']}]\r\n---\r\n" + ENV['CHANGELOG']
@@ -215,7 +265,7 @@ lane :do_upload_firim do
     )
     wechatwork(
       webhook: ENV['Android_Dev'],
-      markdown: "Upload <font color=\"info\">success</font>. \r\nFlavor: #{flavor}",
+      markdown: "Flavor: #{flavor} upload <font color=\"info\">success</font>.",
       mentioned_mobile_list: []
     )
 
@@ -227,7 +277,7 @@ lane :do_upload_firim do
     else
       wechatwork(
         webhook: ENV['Android_Dev'],
-        markdown: "Upload <font color=\"warning\">failed</font>. \r\nFlavor: #{flavor}",
+        markdown: "Flavor: #{flavor} upload <font color=\"warning\">failed</font>.",
         mentioned_mobile_list: []
       )
 
