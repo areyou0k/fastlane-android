@@ -45,7 +45,7 @@ before_all do |lane, options|
   # "1" means compile htprivate.
   ENV['HTFLAVOR'] = read_changelog(
     changelog_path: './CHANGELOG.md',
-    section_identifier: '[Flavor]',
+    section_identifier: '[HtFlavor]',
     excluded_markdown_elements: ['-', '###']
   )
 
