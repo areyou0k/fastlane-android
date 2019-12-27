@@ -100,15 +100,16 @@ desc "Submit a new Release Build to all"
 lane :do_publish_all do |options|
   do_publish_china
   do_publish_google
-  do_jira_issue
-
+  
   if ENV['HTFLAVOR'] = "1"
     do_publish_htprivate
   end
 
-  # if ENV['TRIGER'] != "1"
-  #   do_wechat_all
-  # end
+  do_jira_issue
+  
+  if ENV['TRIGER'] != "1"
+    do_wechat_all
+  end
 end
 
 desc "Compile China flavor."
@@ -253,7 +254,7 @@ lane :do_upload_firim do
     puts lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
     wechatwork(
       webhook: ENV['Android_Dev'],
-      markdown: "Flavor: #{flavor} app uploading.",
+      markdown: "#{flavor} app uploading.",
       mentioned_mobile_list: []
     )
     change_log = "[#{flavor}]+[#{ENV['GIT_BRANCH']}]\r\n---\r\n" + ENV['CHANGELOG']
@@ -265,7 +266,7 @@ lane :do_upload_firim do
     )
     wechatwork(
       webhook: ENV['Android_Dev'],
-      markdown: "Flavor: #{flavor} upload <font color=\"info\">success</font>.",
+      markdown: "#{flavor} app upload <font color=\"info\">success</font>.",
       mentioned_mobile_list: []
     )
 
@@ -277,7 +278,7 @@ lane :do_upload_firim do
     else
       wechatwork(
         webhook: ENV['Android_Dev'],
-        markdown: "Flavor: #{flavor} upload <font color=\"warning\">failed</font>.",
+        markdown: "#{flavor} upload <font color=\"warning\">failed</font>.",
         mentioned_mobile_list: []
       )
 
