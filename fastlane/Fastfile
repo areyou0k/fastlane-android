@@ -101,7 +101,7 @@ lane :do_publish_all do |options|
   do_publish_china
   do_publish_google
   
-  if ENV['HTFLAVOR'] = "1"
+  if ENV['HTFLAVOR'] == "1"
     do_publish_htprivate
   end
 
