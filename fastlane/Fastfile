@@ -101,13 +101,13 @@ lane :do_publish_all do |options|
   do_publish_china
   do_publish_google
   
-  if ENV['HTFLAVOR'] == "1"
+  if "1" == ENV['HTFLAVOR']
     do_publish_htprivate
   end
 
   do_jira_issue
   
-  if ENV['TRIGER'] != "1"
+  if "1" != ENV['TRIGER']
     do_wechat_all
   end
 end
@@ -199,7 +199,7 @@ lane :do_publish_china do |options|
   #  print_command_output: false
   #  )
   do_compile_china
-  if ENV['TRIGER'] != "1"
+  if "1" != ENV['TRIGER']
     do_upload_firim
   end
 end
@@ -213,7 +213,7 @@ lane :do_publish_google do |options|
   #  print_command_output: false
   #)
   do_compile_google
-  if ENV['TRIGER'] != "1"
+  if "1" != ENV['TRIGER']
     do_upload_firim
   end
 end
@@ -227,7 +227,7 @@ lane :do_publish_htprivate do |options|
   #  print_command_output: false
   #)
   do_compile_htprivate
-  if ENV['TRIGER'] != "1"
+  if "1" != ENV['TRIGER']
     do_upload_firim
   end
 end
