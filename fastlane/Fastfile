@@ -50,7 +50,8 @@ before_all do |lane, options|
   )
 
   ENV['Android_Dev'] = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e87d05fe-5255-4629-b448-5270f497cba2'
-  ENV['Android_ALL'] = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=07b1fe20-a3e6-47e9-95e9-c381c967d703'
+  ENV['Android_ALL'] = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e87d05fe-5255-4629-b448-5270f497cba2'
+  ##ENV['Android_ALL'] = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=07b1fe20-a3e6-47e9-95e9-c381c967d703'
   #ENV['Android_ALL'] = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=59122387-2ec3-4cad-932e-0979efa71f89'
 
   phone_list = "18779144521,18126009603"
