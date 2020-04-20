@@ -16,7 +16,8 @@ module Fastlane
               item_strip = item.strip
             if item_strip.include? "https://jira.hellotalk8.com/jira/browse/"
               # issue = item_strip.gsub(/.*\(https:\/\/jira.hellotalk8.com\/jira\/browse\//, '{"issue": "').gsub(/\)/, '') + '"}'
-              issue = item_strip.gsub(/.*\(https:\/\/jira.hellotalk8.com\/jira\/browse\//, '').gsub(/\)/, '')
+              #issue = item_strip.gsub(/.*\(https:\/\/jira.hellotalk8.com\/jira\/browse\//, '').gsub(/\)/, '')
+              issue = item_strip.gsub(/.*https:\/\/jira.hellotalk8.com\/jira\/browse\//, '').gsub(/\)/, '')
               puts issue
               self.change_assignee(issue)
               # self.change_workflow_status(issue)
