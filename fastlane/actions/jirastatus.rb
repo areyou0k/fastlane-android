@@ -16,7 +16,6 @@ module Fastlane
               item_strip = item.strip
             if item_strip.include? "https://jira.hellotalk8.com/jira/browse/"
               # issue = item_strip.gsub(/.*\(https:\/\/jira.hellotalk8.com\/jira\/browse\//, '{"issue": "').gsub(/\)/, '') + '"}'
-              #issue = item_strip.gsub(/.*\(https:\/\/jira.hellotalk8.com\/jira\/browse\//, '').gsub(/\)/, '')
               issue = item_strip.gsub(/.*https:\/\/jira.hellotalk8.com\/jira\/browse\//, '').gsub(/\)/, '')
               puts issue
               self.change_assignee(issue)
@@ -110,23 +109,34 @@ module Fastlane
             else
               user = reporter
             end
-          #elsif
-          else
-            full_json['fields']['issuetype']['name'] == "Story Bugs"
-            puts "Issue #{issue} type is: Story Bugs."
+          # elsif full_json['fields']['issuetype']['name'] == "Story Bugs"
+          #   puts "Issue #{issue} type is: Story Bugs."
+          #   user = "sunshine"
+          #   #workflow "Story Bug Fixed" statu id
+          #   workflow = "11"
+          #   puts "Change status to: Story Bug Fixed."
+          #   change_workflow_status(issue, workflow)
+          elsif full_json['fields']['issuetype']['name'] == "Bug"
+            puts "Issue #{issue} type is: Bugs."
+            #user = full_json['fields']['reporter']['name']
             user = "sunshine"
-            #workflow "Story Bug Fixed" statu id
-            workflow = "11"
-            puts "Change status to: Story Bug Fixed."
+            #workflow "Passed Build" statu id
+            workflow = "91"
+            puts "Change status to: Passed Build."
             change_workflow_status(issue, workflow)
-          #else
-          #  puts "Issue #{issue} type is: Bugs."
-          #  #user = full_json['fields']['reporter']['name']
-          #  user = "sunshine"
-          #  #workflow "Passed Build" statu id
-          #  workflow = "91"
-          #  puts "Change status to: Passed Build."
-          #  change_workflow_status(issue, workflow)
+
+          # sub-task，UI bug，Story bug 这三种类型的仅更改assignee为report
+          elsif full_json['fields']['issuetype']['name'] == "Sub-task"
+            user = full_json['fields']['reporter']['name']
+
+          elsif full_json['fields']['issuetype']['name'] == "UI Bug"
+            user = full_json['fields']['reporter']['name']
+
+          elsif full_json['fields']['issuetype']['name'] == "Story Bugs"
+            user = full_json['fields']['reporter']['name']
+
+          else
+              user = full_json['fields']['assignee']['name']
           end
 
           assignee = {"update": {"assignee": [{"set": {"name": "#{user}"}}]}}
