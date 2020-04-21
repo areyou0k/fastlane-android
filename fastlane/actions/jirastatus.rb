@@ -110,7 +110,8 @@ module Fastlane
             else
               user = reporter
             end
-          elsif
+          #elsif
+          else
             full_json['fields']['issuetype']['name'] == "Story Bugs"
             puts "Issue #{issue} type is: Story Bugs."
             user = "sunshine"
@@ -118,14 +119,14 @@ module Fastlane
             workflow = "11"
             puts "Change status to: Story Bug Fixed."
             change_workflow_status(issue, workflow)
-          else
-            puts "Issue #{issue} type is: Bugs."
-            #user = full_json['fields']['reporter']['name']
-            user = "sunshine"
-            #workflow "Passed Build" statu id
-            workflow = "91"
-            puts "Change status to: Passed Build."
-            change_workflow_status(issue, workflow)
+          #else
+          #  puts "Issue #{issue} type is: Bugs."
+          #  #user = full_json['fields']['reporter']['name']
+          #  user = "sunshine"
+          #  #workflow "Passed Build" statu id
+          #  workflow = "91"
+          #  puts "Change status to: Passed Build."
+          #  change_workflow_status(issue, workflow)
           end
 
           assignee = {"update": {"assignee": [{"set": {"name": "#{user}"}}]}}
