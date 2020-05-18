@@ -114,7 +114,7 @@ end
 
 desc "Compile China flavor."
 lane :do_compile_china do |options|
-  build_type = option[:build_type]
+  build_type = options[:build_type]
   begin
     gradle(
       task: "assemble",
@@ -142,7 +142,7 @@ end
 
 desc "Compile Google flavor."
 lane :do_compile_google do |options|
-  build_type = option[:build_type]
+  build_type = options[:build_type]
   begin
     gradle(
       task: "assemble",
@@ -206,7 +206,7 @@ lane :do_publish_china do |options|
   if "2" == ENV['HTFLAVOR']
      do_compile_china(build_type: "Dev")
   else
-     do_compile_china(build_type: "release")
+     (build_type: "release")
   end
 
   if "1" != ENV['TRIGER']
