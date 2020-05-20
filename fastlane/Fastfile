@@ -273,7 +273,14 @@ lane :do_upload_firim do
       markdown: "#{flavor} app uploading.",
       mentioned_mobile_list: []
     )
-    change_log = "[#{flavor}]+[#{ENV['GIT_BRANCH']}]\r\n---\r\n" + ENV['CHANGELOG']
+
+    # 增加条件判断 是否为DEV环境包
+    if "2" == ENV['HTFLAVOR']
+      change_log = "[#{flavor}]+[#{ENV['GIT_BRANCH']}]\r\n---此包为测试环境包，不可用于生产\r\n" + ENV['CHANGELOG']
+    else
+      change_log = "[#{flavor}]+[#{ENV['GIT_BRANCH']}]\r\n---\r\n" + ENV['CHANGELOG']
+    end
+
     firim(
       apk: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH],
       app_version: get_version_name().tr(",",""),
